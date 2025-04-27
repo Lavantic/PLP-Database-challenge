@@ -1,0 +1,106 @@
+erDiagram
+    PRODUCT {
+        int product_id PK
+        int brand_id FK
+        int category_id FK
+        string name
+        decimal base_price
+        text description
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    BRAND {
+        int brand_id PK
+        string name
+        string logo_url
+        text description
+    }
+    
+    PRODUCT_CATEGORY {
+        int category_id PK
+        string name
+        int parent_category_id FK
+        text description
+    }
+    
+    PRODUCT_ITEM {
+        int item_id PK
+        int product_id FK
+        decimal price
+        string SKU
+        int quantity_in_stock
+        boolean active
+    }
+    
+    PRODUCT_IMAGE {
+        int image_id PK
+        int product_id FK
+        int product_item_id FK
+        string url
+        boolean is_primary
+        string alt_text
+    }
+    
+    COLOR {
+        int color_id PK
+        string name
+        string hex_code
+    }
+    
+    SIZE_CATEGORY {
+        int size_category_id PK
+        string name
+        string description
+    }
+    
+    SIZE_OPTION {
+        int size_id PK
+        int size_category_id FK
+        string name
+        string measurement
+    }
+    
+    PRODUCT_VARIATION {
+        int variation_id PK
+        int product_item_id FK
+        int color_id FK
+        int size_id FK
+    }
+    
+    ATTRIBUTE_CATEGORY {
+        int attr_category_id PK
+        string name
+        text description
+    }
+    
+    ATTRIBUTE_TYPE {
+        int attr_type_id PK
+        string name
+        string data_type
+    }
+    
+    PRODUCT_ATTRIBUTE {
+        int attribute_id PK
+        int product_id FK
+        int product_item_id FK
+        int attr_category_id FK
+        int attr_type_id FK
+        string attr_name
+        string attr_value
+    }
+    
+    BRAND ||--o{ PRODUCT : "has"
+    PRODUCT_CATEGORY ||--o{ PRODUCT : "categorizes"
+    PRODUCT_CATEGORY ||--o{ PRODUCT_CATEGORY : "has parent"
+    PRODUCT ||--o{ PRODUCT_ITEM : "has variations"
+    PRODUCT ||--o{ PRODUCT_IMAGE : "has"
+    PRODUCT_ITEM ||--o{ PRODUCT_IMAGE : "has"
+    PRODUCT_ITEM ||--o{ PRODUCT_VARIATION : "has"
+    COLOR ||--o{ PRODUCT_VARIATION : "used in"
+    SIZE_OPTION ||--o{ PRODUCT_VARIATION : "used in"
+    SIZE_CATEGORY ||--o{ SIZE_OPTION : "contains"
+    PRODUCT ||--o{ PRODUCT_ATTRIBUTE : "has"
+    PRODUCT_ITEM ||--o{ PRODUCT_ATTRIBUTE : "has"
+    ATTRIBUTE_CATEGORY ||--o{ PRODUCT_ATTRIBUTE : "categorizes"
+    ATTRIBUTE_TYPE ||--o{ PRODUCT_ATTRIBUTE : "defines"
